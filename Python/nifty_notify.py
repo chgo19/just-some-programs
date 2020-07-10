@@ -94,25 +94,28 @@ if run and not (current_time.minute/fetch_time).is_integer():
 current_time = datetime.datetime.now()
 
 
-# last_time = -1  # not really needed commented everywhere
-last_nifty50 = -1
-last_nifty_bank = -1
+# last_nifty50 = -1
+# last_nifty_bank = -1
 
 
 # first fetch
-if run:  # and last_time == -1
-    last_nifty50, last_nifty_bank = get_data()
+if run:
+    try:
+        last_nifty50, last_nifty_bank = get_data()
 
-    print(f"{current_time.strftime('%I:%M')}"
-          + f" --- First Fetch ----> Nifty50: {int(last_nifty50)}"
-          + f" --- Nifty Bank: {int(last_nifty_bank)}")
+        print(f"{current_time.strftime('%I:%M')}"
+            + f" --- First Fetch ----> Nifty50: {int(last_nifty50)}"
+            + f" --- Nifty Bank: {int(last_nifty_bank)}")
 
-    # last_time = current_time
+    except:
+        # on fetch fail, due to network probably
+        print(f"{current_time.strftime('%I:%M')}"
+              + "-----> Unable to fetch data!!"
+              + " --- Check if internet is working and run again.")
 
 
-while current_time < end_time:
+while run and current_time < end_time:
 
-    # if current_time - last_time >= check_time:
     try:
         nifty50, nifty_bank = get_data()
 
@@ -133,8 +136,8 @@ while current_time < end_time:
     except:
         # on network or any other error to fetch data
         print(f"{current_time.strftime('%I:%M')}"
-              + "-----> Unable to fetch data!! --- Check if internet is working.")
-    #last_time = current_time
+              + "-----> Unable to fetch data!!"
+              + " --- Check if internet is working.")
 
     if current_time + check_time > end_time:
         time.sleep((end_time - current_time).seconds)
@@ -145,6 +148,7 @@ while current_time < end_time:
     current_time = datetime.datetime.now()
 
 
+# last fetch changes
 if run:
     fifty, bank = get_data()
     print(f"{end_time.strftime('%I:%M')} --- Last Change "
