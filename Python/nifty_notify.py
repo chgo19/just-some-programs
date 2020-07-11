@@ -27,11 +27,11 @@ change_nifty_bank = int(input() or '100')
 print("Checking time(in minutes) (Default is 5): ", end="")
 fetch_time = int(input() or '5')
 
-# Notification timout time in seconds
+# Notification timeout time in seconds
 NOTIFICATION_TIMEOUT = 30
 
 
-# function for showing notification fiven a shar symbol name
+# function for showing notification given a symbol name
 def notify_now(symbol, change, duration=NOTIFICATION_TIMEOUT):
     title = f"{symbol} Alert!"
     message = f"{change} change is detected"
@@ -68,7 +68,7 @@ else:
     print(f"\nWelcome, printing {fetch_time}min changes..\n")
 
 
-# intisialize Nse class for fetching data
+# initialize Nse class for fetching data
 nse = Nse()
 
 
@@ -94,8 +94,8 @@ if run and not (current_time.minute/fetch_time).is_integer():
 current_time = datetime.datetime.now()
 
 
-# last_nifty50 = -1
-# last_nifty_bank = -1
+last_nifty50 = -1
+last_nifty_bank = -1
 
 
 # first fetch
