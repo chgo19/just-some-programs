@@ -74,21 +74,21 @@ nse = Nse()
 
 # fetching getting nse data
 def get_data():
-    nifty50 = nse.get_index_quote("nifty 50")
-    nifty_bank = nse.get_index_quote("nifty bank")
+    get50 = nse.get_index_quote("nifty 50")
+    get_bank = nse.get_index_quote("nifty bank")
 
-    return nifty50['lastPrice'], nifty_bank['lastPrice']
+    return get50['lastPrice'], get_bank['lastPrice']
 
 
 # start only after start time and perfectly divisible time
-if run and not (current_time.minute/fetch_time).is_integer():
+if run and not (current_time.minute / fetch_time).is_integer():
     if current_time < start_time:
         sleep_time = (start_time - current_time).seconds
     else:
-        sleep_time = ((fetch_time - current_time.minute % fetch_time)*60
+        sleep_time = ((fetch_time - current_time.minute % fetch_time) * 60
                       - current_time.second)
 
-    print(f"First fetch to be done in: {sleep_time//60}m {sleep_time%60}s")
+    print(f"First fetch to be done in: {sleep_time // 60}m {sleep_time % 60}s")
     time.sleep(sleep_time)
 
 current_time = datetime.datetime.now()
@@ -104,10 +104,10 @@ if run:
         last_nifty50, last_nifty_bank = get_data()
 
         print(f"{current_time.strftime('%I:%M')}"
-            + f" --- First Fetch ----> Nifty50: {int(last_nifty50)}"
-            + f" --- Nifty Bank: {int(last_nifty_bank)}")
+              + f" --- First Fetch ----> Nifty50: {int(last_nifty50)}"
+              + f" --- Nifty Bank: {int(last_nifty_bank)}")
 
-    except:
+    except ConnectionError:
         # on fetch fail, due to network probably
         print(f"{current_time.strftime('%I:%M')}"
               + "-----> Unable to fetch data!!"
@@ -142,7 +142,7 @@ while run and current_time < end_time:
     if current_time + check_time > end_time:
         time.sleep((end_time - current_time).seconds)
     else:
-        time.sleep((fetch_time - current_time.minute % fetch_time)*60
+        time.sleep((fetch_time - current_time.minute % fetch_time) * 60
                    - current_time.second)
 
     current_time = datetime.datetime.now()
