@@ -133,7 +133,7 @@ while run and current_time < end_time:
 
         last_nifty_bank, last_nifty50 = nifty_bank, nifty50
 
-    except ConnectionError:
+    except:
         # on network or any other error to fetch data
         print(f"{current_time.strftime('%I:%M')}"
               + "-----> Unable to fetch data!!"
