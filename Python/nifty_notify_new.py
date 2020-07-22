@@ -4,6 +4,8 @@
 # new nifty notify fetching data from the new nse website
 # getting price change for nifty 50 and nifty bank
 # for a specified interval and value
+# need python3
+# pip install plyer, requests
 
 import os
 import time
@@ -79,8 +81,9 @@ def _check_for_sleep(check_time, start_time=_get_start_time(), end_time=_get_end
     if current_time < start_time:
         sleep_time = (start_time - current_time).seconds
 
-    elif current_time + check_interval > end_time:
+    elif current_time + check_interval >= end_time:
         sleep_time = (end_time - current_time).seconds
+        sleep_time += datetime.timedelta(seconds=2)
 
     else:
         sleep_time = (check_time - current_time.minute % check_time) * 60
@@ -146,8 +149,8 @@ def main():
             now50, now_bank = _get_data()
             c50, c_bank = now50 - last50, now_bank - last_bank
             print(f"{current_time.strftime('%I:%M')}"
-                  + f" --- Change Detected ----> Nifty50: {c50:.2f}"
-                  + f" --- Nifty Bank: {c_bank:.2f}")
+                  + f" --- Change Detected ----> Nifty50: {c50:=+6.2f}"
+                  + f" --- Nifty Bank: {c_bank:=+6.2f}")
 
             # send notification if defined change detected
             if abs(c50) >= watch50:
@@ -156,7 +159,8 @@ def main():
                 _notify_now('NIFTY BANK', int(c_bank))
 
             if current_time >= end_time:
-                break
+                print("Market Closed!")
+                return
 
             # update last
             last50, last_bank = now50, now_bank
